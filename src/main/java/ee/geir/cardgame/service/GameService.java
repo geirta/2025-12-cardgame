@@ -1,0 +1,98 @@
+package ee.geir.cardgame.service;
+
+import ee.geir.cardgame.Card;
+import ee.geir.cardgame.GameState;
+import ee.geir.cardgame.entity.Result;
+import ee.geir.cardgame.guess.Guess;
+import ee.geir.cardgame.guess.GuessResponse;
+import ee.geir.cardgame.guess.GuessResult;
+import ee.geir.cardgame.repository.ResultRepository;
+import ee.geir.cardgame.startround.StartRoundResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.SessionScope;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+import java.util.Random;
+
+@Service
+@SessionScope
+public class GameService {
+
+    private static final List<Card> cardDeck = List.of(Card.values());
+    private static final int deckSize = cardDeck.size();
+    private static final Random rand = new Random();
+
+    private final GameState state = new GameState();
+
+    @Autowired
+    private ResultRepository resultRepository;
+
+    public List<Result> addResult(String name) {
+        Result res = new Result();
+        res.setPlayerName(name);
+        res.setScore(state.getScore());
+        res.setTimePlayed(state.getGameDurationInSeconds());
+        resultRepository.save(res);
+        return resultRepository.findAll();
+    }
+
+    public StartRoundResponse startRound() {
+        state.setBaseCard(getCard());
+        state.setRoundStart(Instant.now());
+        System.out.println("checkin:" + state.getRoundStart());
+        state.setScore(0);
+        state.setLives(3);
+        return new StartRoundResponse(state.getBaseCard().name, state.getBaseCard().strength);
+    }
+
+    public GuessResponse getGuessResponse(Guess guess) {
+
+        long elapsedTime = Instant.now().getEpochSecond() - state.getRoundStart().getEpochSecond();
+        if (elapsedTime > 10 || guess == Guess.NONE) {
+            System.out.println("check, times up");
+            state.setGameDurationInSeconds(Math.max(0, Duration.between(state.getRoundStart(), Instant.now()).getSeconds()));
+            System.out.println("m2nguaeg: " + state.getGameDurationInSeconds());
+            return new GuessResponse(GuessResult.TIME_OUT, null, 0, state.getScore(), state.getLives());
+        }
+
+        Card nextCard = getCard();
+        System.out.println(nextCard);
+        boolean correct = switch (guess) {
+            case HIGHER -> nextCard.strength > state.getBaseCard().strength;
+            case EQUAL -> nextCard.strength == state.getBaseCard().strength;
+            case LOWER -> nextCard.strength < state.getBaseCard().strength;
+            default -> false;
+        };
+
+        if (correct) {
+            state.setScore(state.getScore() + 1);
+        } else {
+            state.setLives(state.getLives() - 1);
+        }
+
+        state.setBaseCard(nextCard);
+
+        if (state.getLives() == 0) {
+            System.out.println("check, game over because incorrect choice");
+            state.setGameDurationInSeconds(Math.max(0, Duration.between(state.getRoundStart(), Instant.now()).getSeconds()));
+            return new GuessResponse(GuessResult.GAME_OVER, null, 0, state.getScore(), state.getLives());
+        }
+
+        return new GuessResponse(
+                correct ? GuessResult.CORRECT : GuessResult.WRONG,
+                nextCard.name,
+                nextCard.strength,
+                state.getScore(),
+                state.getLives()
+        );
+    }
+
+    private Card getCard() {
+        Card card = cardDeck.get(rand.nextInt(deckSize));
+        return card;
+    }
+
+}

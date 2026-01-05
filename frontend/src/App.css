@@ -1,0 +1,120 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.gameSection {
+  width: 500px;
+  height: 600px;
+  border: 2px solid #222;
+  border-radius: 10px;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #0f172a;
+  color: white;
+}
+
+.cardsRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.playCard {
+  width: 170px;
+  height: 240px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  color: #111;
+  padding: 12px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.baseCard {
+  color: #0f172a;
+}
+
+.playCard button {
+  margin-top: 6px;
+  background-color: #0f172a !important;
+  color: white;
+}
+
+.gameEnd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.gameStart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 85%;
+  text-align: center;
+}
+
+.gameEnd input {
+  margin-top: 4px;
+  margin-bottom: 8px;
+  padding: 0.6em 1.2em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.gameEnd label {
+  margin-right: 8px;
+}
+
+.gameEnd button {
+  margin-top: 6px;
+}
