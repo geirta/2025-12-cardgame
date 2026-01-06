@@ -1,15 +1,11 @@
 package ee.geir.cardgame.controller;
 
-import ee.geir.cardgame.entity.Result;
-import ee.geir.cardgame.repository.ResultRepository;
 import ee.geir.cardgame.service.GameService;
 import ee.geir.cardgame.guess.GuessRequest;
 import ee.geir.cardgame.guess.GuessResponse;
 import ee.geir.cardgame.startround.StartRoundResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(
@@ -30,11 +26,5 @@ public class GameController {
     public GuessResponse getGuessResponse(@RequestBody GuessRequest request) {
         return gameService.getGuessResponse(request.guess());
     }
-
-    @PostMapping("results")
-    public List<Result> addResult(@RequestBody String name) {
-        return gameService.addResult(name);
-    }
-
 
 }

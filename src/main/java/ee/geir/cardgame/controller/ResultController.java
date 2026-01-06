@@ -3,8 +3,6 @@ package ee.geir.cardgame.controller;
 import ee.geir.cardgame.repository.ResultRepository;
 import ee.geir.cardgame.entity.Result;
 import ee.geir.cardgame.service.ResultService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +13,6 @@ import java.util.List;
         origins = "http://localhost:5173",
         allowCredentials = "true"
 )
-@AllArgsConstructor
-@NoArgsConstructor
 public class ResultController {
 
     @Autowired
@@ -25,10 +21,9 @@ public class ResultController {
     @Autowired
     private ResultService resultService;
 
-    @PostMapping("results22")
+    @PostMapping("results")
     public List<Result> addResult(@RequestBody String name) {
-        resultService.addResult(name);
-        return resultRepository.findAll();
+        return resultService.addResult(name);
     }
 
     @GetMapping("results")

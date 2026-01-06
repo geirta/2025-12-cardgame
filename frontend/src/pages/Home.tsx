@@ -122,9 +122,9 @@ function Home() {
   useEffect(() => {
     if (seconds === 0 && baseCard) {
       const timer = setTimeout(() => {
-        submitGuess("NONE"); // safely called asynchronously
+        submitGuess("NONE");
       }, 0);
-      return () => clearTimeout(timer); // cleanup just in case
+      return () => clearTimeout(timer);
     }
   }, [seconds, baseCard]);
 

@@ -3,7 +3,7 @@
 function Leaderboard() {
   return (
     <div>
-      ssds
+      Leaderboard?
     </div>
   )
 }

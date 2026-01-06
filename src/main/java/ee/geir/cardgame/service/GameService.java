@@ -2,13 +2,11 @@ package ee.geir.cardgame.service;
 
 import ee.geir.cardgame.Card;
 import ee.geir.cardgame.GameState;
-import ee.geir.cardgame.entity.Result;
 import ee.geir.cardgame.guess.Guess;
 import ee.geir.cardgame.guess.GuessResponse;
 import ee.geir.cardgame.guess.GuessResult;
-import ee.geir.cardgame.repository.ResultRepository;
 import ee.geir.cardgame.startround.StartRoundResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -25,19 +23,8 @@ public class GameService {
     private static final int deckSize = cardDeck.size();
     private static final Random rand = new Random();
 
+    @Getter
     private final GameState state = new GameState();
-
-    @Autowired
-    private ResultRepository resultRepository;
-
-    public List<Result> addResult(String name) {
-        Result res = new Result();
-        res.setPlayerName(name);
-        res.setScore(state.getScore());
-        res.setTimePlayed(state.getGameDurationInSeconds());
-        resultRepository.save(res);
-        return resultRepository.findAll();
-    }
 
     public StartRoundResponse startRound() {
         state.setBaseCard(getCard());
