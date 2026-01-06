@@ -9,6 +9,7 @@ public class GameState {
     private Card baseCard;
     private int score = 0;
     private int lives = 3;
+    private Instant gameStart;
     private Instant roundStart;
     private long gameDurationInSeconds;
 }

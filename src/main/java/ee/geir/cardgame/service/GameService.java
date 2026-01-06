@@ -28,8 +28,8 @@ public class GameService {
 
     public StartRoundResponse startRound() {
         state.setBaseCard(getCard());
+        state.setGameStart(Instant.now());
         state.setRoundStart(Instant.now());
-        System.out.println("checkin:" + state.getRoundStart());
         state.setScore(0);
         state.setLives(3);
         return new StartRoundResponse(state.getBaseCard().name, state.getBaseCard().strength);
@@ -37,10 +37,12 @@ public class GameService {
 
     public GuessResponse getGuessResponse(Guess guess) {
 
-        long elapsedTime = Instant.now().getEpochSecond() - state.getRoundStart().getEpochSecond();
+        Instant guessReceivedTime = Instant.now();
+        //System.out.println("Game length: " + (guessReceivedTime.getEpochSecond() - state.getGameStart().getEpochSecond()));
+        long elapsedTime = guessReceivedTime.getEpochSecond() - state.getRoundStart().getEpochSecond();
         if (elapsedTime > 10 || guess == Guess.NONE) {
             System.out.println("check, times up");
-            state.setGameDurationInSeconds(Math.max(0, Duration.between(state.getRoundStart(), Instant.now()).getSeconds()));
+            state.setGameDurationInSeconds(Math.max(0, Duration.between(state.getGameStart(), guessReceivedTime).getSeconds()));
             System.out.println("m2nguaeg: " + state.getGameDurationInSeconds());
             return new GuessResponse(GuessResult.TIME_OUT, null, 0, state.getScore(), state.getLives());
         }
@@ -61,10 +63,11 @@ public class GameService {
         }
 
         state.setBaseCard(nextCard);
+        state.setRoundStart(Instant.now());
 
         if (state.getLives() == 0) {
             System.out.println("check, game over because incorrect choice");
-            state.setGameDurationInSeconds(Math.max(0, Duration.between(state.getRoundStart(), Instant.now()).getSeconds()));
+            state.setGameDurationInSeconds(Math.max(0, Duration.between(state.getGameStart(), guessReceivedTime).getSeconds()));
             return new GuessResponse(GuessResult.GAME_OVER, null, 0, state.getScore(), state.getLives());
         }
 
@@ -78,7 +81,14 @@ public class GameService {
     }
 
     private Card getCard() {
-        Card card = cardDeck.get(rand.nextInt(deckSize));
+
+        Card baseCard = cardDeck.get(rand.nextInt(deckSize));
+        Card card;
+
+        do {
+            card = cardDeck.get(rand.nextInt(deckSize));
+        } while (baseCard != null && card == baseCard);
+
         return card;
     }
 
