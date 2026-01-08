@@ -41,6 +41,12 @@
   color: #888;
 }
 
+
+
+
+
+
+
 .gameSection {
   width: 500px;
   height: 600px;
@@ -52,7 +58,7 @@
   color: white;
 }
 
-.cardsRow {
+.cardsRow, .scoreBoardFooterActions {
   display: flex;
   justify-content: space-between;
   gap: 16px;
@@ -79,11 +85,37 @@
   color: #0f172a;
 }
 
+/*
 .playCard button {
   margin-top: 6px;
   background-color: #0f172a !important;
   color: white;
 }
+
+.playCard button:hover {
+  opacity: 0.9;
+}
+*/
+
+
+
+.guessBtn {
+  background-color: #0f172a;
+  color: white;
+}
+
+.guessBtn.btn-correct {
+  background-color: #16a34a;
+}
+
+.guessBtn.btn-wrong {
+  background-color: #dc2626;
+}
+
+
+
+
+
 
 .gameEnd {
   display: flex;
@@ -117,4 +149,41 @@
 
 .gameEnd button {
   margin-top: 6px;
+}
+
+.scoreBoard {
+  color: #0f172a;
+}
+
+.scoreBoard button {
+  color: #0f172a;
+}
+
+
+
+
+.scoreBoard table {
+  margin: 20px auto;       /* centers table horizontally and adds top/bottom spacing */
+  border-collapse: separate; /* must use separate for border-radius to work */
+  border-spacing: 0;         /* remove spacing between cells */
+  width: 100%;               
+  text-align: center;      
+  border: 1px solid #ccc;    /* optional: outer border */
+  border-radius: 10px 10px 0 0;       /* round the corners */
+  overflow:hidden;          /* ensures cells don't overflow the rounded corners */
+}
+
+.scoreBoard th, 
+.scoreBoard td {
+  padding: 10px 15px;      /* spacing inside cells */
+  border-bottom: 1px solid #ccc; /* optional: subtle row separation */
+}
+
+.scoreBoard th {
+  cursor: pointer;         /* shows pointer for sortable columns */
+  background-color: #f4f4f4; /* optional: header background */
+}
+
+.scoreBoard tr:hover {
+  background-color: rgba(0,0,0,0.05); /* subtle hover effect for rows */
 }

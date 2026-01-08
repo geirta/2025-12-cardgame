@@ -40,12 +40,15 @@ public class GameService {
         Instant guessReceivedTime = Instant.now();
         //System.out.println("Game length: " + (guessReceivedTime.getEpochSecond() - state.getGameStart().getEpochSecond()));
         long elapsedTime = guessReceivedTime.getEpochSecond() - state.getRoundStart().getEpochSecond();
-        if (elapsedTime > 10 || guess == Guess.NONE) {
+        long timeoutLimit = state.getScore() == 0 ? 10 : 12;
+
+        if (elapsedTime > timeoutLimit || guess == Guess.NONE) {
             System.out.println("check, times up");
             state.setGameDurationInSeconds(Math.max(0, Duration.between(state.getGameStart(), guessReceivedTime).getSeconds()));
             System.out.println("m2nguaeg: " + state.getGameDurationInSeconds());
             return new GuessResponse(GuessResult.TIME_OUT, null, 0, state.getScore(), state.getLives());
         }
+
 
         Card nextCard = getCard();
         System.out.println(nextCard);

@@ -4,6 +4,10 @@ import ee.geir.cardgame.repository.ResultRepository;
 import ee.geir.cardgame.entity.Result;
 import ee.geir.cardgame.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +31,13 @@ public class ResultController {
     }
 
     @GetMapping("results")
-    public List<Result> getResults() {
-        return resultRepository.findAll();
+    public Page<Result> getResults(Pageable pageable) {
+        return resultRepository.findAll(pageable);
+    }
+
+    @GetMapping("results/{id}")
+    public List<Result> getPlayerResults(@PathVariable Long id) {
+        return resultRepository.findByPlayer_IdOrderByScoreDesc(id);
     }
 
 }

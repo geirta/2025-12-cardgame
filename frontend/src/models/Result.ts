@@ -1,7 +1,8 @@
+import type { Player } from "./Player"
 
 export type Result = {
   id: number,
   score: number,
-  playerName: string,
+  player: Player,
   timePlayed: number
 }
